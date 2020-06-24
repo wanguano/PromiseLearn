@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- <button>按钮</button>
+  <textarea name="" id="" cols="30" rows="10"></textarea> -->
+</body>
+
+<script>
+  // document.querySelector('button').onclick = function () {
+  //   var arr = [document.querySelector('textarea').value]
+  //   var str = arr.join()
+  //   alert(str)
+  // }
+
+
+  senAjax({
+    url: 'http://localhost:3000/user',
+    method: 'get',
+    success(result) {
+      var name = result;
+      senAjax({
+        url: 'http://localhost:3000/age',
+        method: 'get',
+        success(result) {
+          var age = result;
+          senAjax({
+            url: 'http://localhost:3000/info',
+            method: 'get',
+            success(result) {
+                console.log(name + age + result)
+            },
+            error(err) {
+              console.log(err)
+            }
+          })
+        },
+        error(err) {
+          console.log(err)
+        }
+      })
+    },
+    error(err) {
+      console.log(err)
+    }
+  })
+
+  function senAjax(options) {
+    let { url, data, method, success, error } = options;
+    var xhr = new XMLHttpRequest;
+    // method的默认值
+    method = method ? method : 'get';
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4) return;
+      if (xhr.status >= 200 && xhr.status < 300) {
+        if (success) success(xhr.response)
+      } else {
+        if (error) error('当前您的网络状态不佳')
+      }
+    }
+
+    // 整理参数
+    let str = '';
+    for (let key in data) {
+      str += `${key}=${data[key]}&`;
+    }
+    // 判断是否以&符结尾,返回布尔值,截取到最后的&符  
+    str = str.endsWith('&') ? str.substr(0, str.lastIndexOf('&')) : str;
+
+    // 根据请求方式,决定如何携带参数
+    if (method.toUpperCase() === 'GET') {
+      xhr.open(method, url + '?' + str);
+      xhr.send();
+    } else {
+      xhr.open(method, url);
+      // 设置请求头,post请求必须要设置content-type,标记请求体内容的解析方式,不然后端无法解析获取数据
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.send(str);
+    }
+  }
+</script>
+
+
+</html>

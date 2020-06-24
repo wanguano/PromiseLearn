@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 
+    1. Promise构造函数: Promise (executor) {}
+        excutor函数: 同步执行  (resolve, reject) => {}
+        resolve函数: 内部定义成功时我们调用的函数 value => {}
+        reject函数: 内部定义失败时我们调用的函数 reason => {}
+        说明: excutor会在Promise内部立即同步回调,异步操作在执行器中执行
+
+    2. Promise.prototype.then方法: (onResolved, onRejected) => {}
+        onResolved函数: 成功的回调函数  (value) => {}
+        onRejected函数: 失败的回调函数 (reason) => {}
+        说明: 指定用于得到成功value的成功回调和用于得到失败reason的失败回调
+              返回一个新的promise对象
+
+    3. Promise.prototype.catch方法: (onRejected) => {}
+        onRejected函数: 失败的回调函数 (reason) => {}
+        说明: then()的语法糖, 相当于: then(undefined, onRejected)
+
+    4. Promise.resolve方法: (value) => {}
+        value: 成功的数据或promise对象
+        说明: 返回一个成功/失败的promise对象
+
+    5. Promise.reject方法: (reason) => {}
+        reason: 失败的原因
+        说明: 返回一个失败的promise对象
+
+    6. Promise.all方法: (promises) => {}
+        promises: 包含n个promise的数组
+        说明: 返回一个新的promise, 只有所有的promise都成功才成功, 只要有一个失败了就直接失败
+    7. Promise.race方法: (promises) => {}
+        promises: 包含n个promise的数组
+        说明: 返回一个新的promise, 第一个完成的promise的结果状态就是最终的结果状态
+  -->
+  <script>
+    // new Promise((resolve, reject) => {
+    //   // 执行同步执行器函数 execute 
+    //   // 执行异步操作👇
+    //   setTimeout(() => {
+    //     // resolve(1)
+    //     reject('onRejected()失败了')
+    //   }, 1000);
+    // }).then((value) => {
+    //   console.log(value)
+    // }).catch((reason) => {
+    //   console.log(reason)
+    // })
+
+    /*  Promise函数对象方法: resolve, reeject */
+    // 创建一个value值为3的promise对象
+    const p1 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(3)
+      }, 1000);
+    })
+    const p2 = Promise.resolve(4)
+    const p3 = Promise.reject(5)
+    p1.then(value => console.log('p1 value', value))
+    p2.then(value => console.log('p2 value', value))
+    p3.catch(reason => console.log('p3 reason', reason))
+
+    /* Promise.all([prmise,...]) 
+        参数: 数组中传递promise对象
+        返回值: 返回新的promise对象,只有所有primise状态都成功才可以,只要有一个失败了就失败
+        values: 返回的是成功的values数组格式
+        reason: 返回的是失败的reason
+        数据的顺序以promise数组顺序一致
+    */
+    // const p4 = Promise.all([p1, p2, p3])
+    // const p4 = Promise.all([p1, p2])
+    // p4.then(
+    //   (values) => console.log('p4 all onResolved()', values),
+    //   (reason) => console.log('p4 all onRejected()', reason)
+    // )
+
+    /* Promise.rice([promise,...])
+        返回值: 返回新的promise对象, 第一个完成的promise的结果状态就是最终的结果状态
+        说明: 返回一个新的promise, 第一个完成的promise结果就是最终的结果状态
+        数组中哪一个promise最先返回状态,就是最终的结果状态
+    */
+    // const p5 = Promise.race([p1, p2, p3])
+    const p5 = Promise.race([p1,  p3])
+    p5.then(
+      (value) => console.log('p5 race onResolved()', value),
+      (reason) => console.log('p5 race onRejected()', reason)
+    )
+  </script>
+</body>
+<input type="text" >
+</html>
