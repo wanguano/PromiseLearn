@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+</body>
+<script src="./Promise_custom.js"></script>
+<script>
+  const p1 = Promise.resolve(1)
+  const p2 = Promise.resolve(new Promise(resolve => {resolve(2)}))
+  const p3= Promise.reject(3)
+
+  // p1.then(value => console.log(value))
+  // p2.then(value => console.log(value))
+  // p3.catch(reason => console.log(reason))
+  Promise.race([p2,p1,p3]).then(
+    value => console.log(value),
+    reason => console.log(reason)
+  )
+
+</script>
+
+</html>
