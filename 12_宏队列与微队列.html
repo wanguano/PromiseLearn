@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+</body>
+
+<script>
+  // JS中用来存储回调函数的队列包含 2 个不同特定的队列, 只有微任务全部执行完毕才会执行宏任务
+  /* 
+     宏队列: [  ] 宏任务
+     微队列: [  ] 微任务
+     3 4 1 5 2
+  */
+
+  setTimeout(() => {
+    console.log('setTimeout callback()', 1)
+    Promise.resolve(5).then(value => {
+        console.log('onResolved3()', value)
+      })
+  }, 0)
+
+  setTimeout(() => {
+    console.log('setTimeout callback()', 2)
+  }, 0)
+
+  Promise.resolve(3).then(value => {
+    console.log('onResolved1()', value)
+  })
+
+  Promise.resolve(4).then(value => {
+    console.log('onResolved2()', value)
+  })
+</script>
+
+</html>
